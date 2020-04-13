@@ -1,15 +1,17 @@
 import argparse
+import numpy             as np
+import matplotlib.pyplot as plt
 
-from keras.utils             import np_utils
-from dataset.datasetloader   import DatasetLoader
-from sklearn.preprocessing   import LabelEncoder
-from sklearn.model_selection import train_test_split
+from keras.utils                  import np_utils
+from dataset.datasetloader        import DatasetLoader
+from sklearn.metrics              import classification_report
+from sklearn.preprocessing        import LabelEncoder
+from sklearn.model_selection      import train_test_split
+from networks.convolutional.lenet import LeNet
 
 def main():
     print("[INFO] loading dataset...")
     data, labels = loadDataset()
-    # print("[TEST] First 20 data images loaded: {}".format(data[:20]))
-    # print("[TEST] First 20 labels loaded: {}".format(labels[:20]))
 
     print("[INFO] applying one-hot encoding to labels...")
     label_encoder, labels = oneHotEncoding(labels)
@@ -23,21 +25,17 @@ def main():
                                                           stratify=labels,
                                                           random_state=13)
 
-    print("[TEST] checking 5 first of each train and test partition...")
-    print("[TEST] X train: {}".format(X_train[:5]))
-    print("[TEST] y train: {}".format(y_train[:5]))
-    print("[TEST] X test: {}".format(X_test[:5]))
-    print("[TEST] y test: {}".format(y_test[:5]))
-
     print("[INFO] compiling model...")
-    # lenet.build(), lenet.compile()
+    lenet_model = createModel()
 
     print("[INFO] training network...")
-    # lenet.trainNetwork()
+    model_history = trainModel(lenet_model, X_train, X_test,
+                               y_train, y_test, class_weight)
 
     print("[INFO] evaluating network...")
+    evaluateNetwork(lenet_model, model_history, label_encoder, X_test, y_test)
+
     print("[INFO] serializing network...")
-    print("[INFO] plotting loss and accuracy")
 
 def getArguments():
     ap = argparse.ArgumentParser()
@@ -62,6 +60,41 @@ def computeClassWeight(labels):
     class_totals = labels.sum(axis=0)
     class_weight = class_totals.max() / class_totals
     return class_weight
+
+def createModel():
+    lenet_model = LeNet(width=28, height=28, depth=1, classes=2)
+    lenet_model.build()
+    lenet_model.compile(loss_function="binary_crossentropy",
+                        optimizer="adam", metrics_list=["accuracy"])
+    return lenet_model
+
+def trainModel(model, data_train, data_test, label_train,
+               label_test, class_weight):
+    return model.trainNetwork(data=data_train, labels=label_train,
+                             validation_data=(data_test, label_test),
+                             class_weight=class_weight, batch_size=64,
+                             epochs=15)
+
+def evaluateNetwork(model, model_history, label_encoder, data, labels):
+    predictions = model.predict(data, batch_size=64)
+    print(classification_report(labels.argmax(axis=1),
+                                predictions.argmax(axis=1),
+                                target_names=label_encoder.classes_))
+    plot(model_history)
+
+def plot(history):
+    plt.style.use("ggplot")
+    plt.figure()
+    plt.plot(np.arange(0, 15), history.history["loss"], label="train_loss")
+    plt.plot(np.arange(0, 15), history.history["val_loss"], label="val_loss")
+    plt.plot(np.arange(0, 15), history.history["accuracy"], label="acc")
+    plt.plot(np.arange(0, 15), history.history["val_accuracy"],
+             label="val_acc")
+    plt.title("Loss and Accuracy")
+    plt.xlabel("Epoch")
+    plt.ylabel("Loss/Accuracy")
+    plt.legend()
+    plt.show()
 
 if __name__ == '__main__':
     main()

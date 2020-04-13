@@ -89,7 +89,7 @@ class LeNet:
 
 
     def trainNetwork(self, data, labels, validation_data=None,
-                     batch_size=None, epochs=1, verbose=1):
+                     batch_size=None, class_weight=None, epochs=1, verbose=1):
         """
         Function that trains (fit) the model built
 
@@ -97,11 +97,13 @@ class LeNet:
         :param labels: the output labes
         :param validation_data: tuple for validate the fitting
         :param batch_size: the size of fitting batches
+        :param class_weight: weight of class to manage imbalance
         :param epochs: the number of fitting epochs
         :param verbose: verbosity of the network
         :return: Return a History object of model fitting
         """
         return self.model.fit(data, labels, validation_data=validation_data,
+                              class_weight=class_weight,
                               batch_size=batch_size, epochs=epochs,
                               verbose=verbose)
 
