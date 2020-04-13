@@ -2,8 +2,9 @@ import os
 import cv2
 import imutils
 import numpy as np
-from   imutils                   import paths
-from   keras.preprocessing.image import img_to_array
+
+from imutils                   import paths
+from keras.preprocessing.image import img_to_array
 
 
 class DatasetLoader:
