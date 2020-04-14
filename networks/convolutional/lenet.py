@@ -121,6 +121,13 @@ class LeNet:
         else:
             return self.model.predict(data)
 
+    def save(self, path):
+        """
+        Serializes the model in path
+
+        :param path: the path where the model will be saved
+        """
+        self.model.save(path)
 
     def _buildConvReluPoolLayers(self, filters, filter_size,
                                  padding_type, activation_function,

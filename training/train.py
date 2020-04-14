@@ -11,7 +11,7 @@ from networks.convolutional.lenet import LeNet
 
 def main():
     print("[INFO] loading dataset...")
-    data, labels = loadDataset()
+    data, labels, args = loadDataset()
 
     print("[INFO] applying one-hot encoding to labels...")
     label_encoder, labels = oneHotEncoding(labels)
@@ -36,12 +36,13 @@ def main():
     evaluateNetwork(lenet_model, model_history, label_encoder, X_test, y_test)
 
     print("[INFO] serializing network...")
+    lenet_model.save(args["model"])
 
 def getArguments():
     ap = argparse.ArgumentParser()
     ap.add_argument("-d", "--dataset", required=True,
                     help="path to input dataset of faces")
-    ap.add_argument("-m", "--model", default="models/lenet_smiles.hdf5",
+    ap.add_argument("-m", "--model", default="lenet_smiles.hdf5",
                     help="path to save model")
     return vars(ap.parse_args())
 
@@ -49,7 +50,7 @@ def loadDataset():
     args = getArguments()
     dataset_loader = DatasetLoader(args["dataset"])
     (data, labels) = dataset_loader.load(verbose=100)
-    return data, labels
+    return data, labels, args
 
 def oneHotEncoding(labels):
     label_encoder = LabelEncoder().fit(labels)
