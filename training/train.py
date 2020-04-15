@@ -39,12 +39,12 @@ def main():
     lenet_model.save(args["model"])
 
 def getArguments():
-    ap = argparse.ArgumentParser()
-    ap.add_argument("-d", "--dataset", required=True,
+    arg_parser = argparse.ArgumentParser()
+    arg_parser.add_argument("-d", "--dataset", required=True,
                     help="path to input dataset of faces")
-    ap.add_argument("-m", "--model", default="lenet_smiles.hdf5",
+    arg_parser.add_argument("-m", "--model", default="lenet_smiles.hdf5",
                     help="path to save model")
-    return vars(ap.parse_args())
+    return vars(arg_parser.parse_args())
 
 def loadDataset():
     args = getArguments()
