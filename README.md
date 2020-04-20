@@ -1,6 +1,8 @@
 # smile-detector
 A real-time smile detector program, based on Adrian Rosebrock's Deep Learning for Computer Vision with Python, Chapter 22.
 
+<img src="https://imgur.com/moPlcdw.jpg" width="360" height="320" alt="No Smile"> <img src="https://imgur.com/76OjrGR.jpg" width="360" height="320" alt="Smile">
+
 ## How to Run
 
 Install git
@@ -59,10 +61,16 @@ Main program captures real-time video from webcam. Then, detects faces and draw 
 
 ## Project structure
 cascade/  - Folder for cascade classifiers. Provide any classifiers here.
+
 dataset/  - Scripts utils for dataset manipulation. Don't put your datasets here, as will increase project size.
+
 models/   - Folder for storing custom trained models
+
 networks/ - Classes for deep learning models creation and building
-    |
-    ---- convolutional/ - Folder for convolutional neural networks classes
+    
+---- convolutional/ - Folder for convolutional neural networks classes
+    
 plots/    - Accuracy, loss and other metrics plots can be stored here
+
 training/ - Train scripts for model creation
+
