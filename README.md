@@ -32,7 +32,8 @@ sudo pip3 install -r smile-detector/requirements.txt
 
 Run the program
 ```bash
-python3 smile-detector/smile-detector.py
+cd smile-detector
+python3 smile-detector.py
 ```
 
 
