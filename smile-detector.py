@@ -54,14 +54,16 @@ def videoLoop(video, is_camera, detector, model):
         if not is_camera and not has_frame:
             break
 
-        frame_copy, gray = processVideo(frame, width=300)
+        frame_copy, gray = processVideo(frame, width=600)
         faces = detectFaces(gray, detector, scale=1.1, neighbors=5, size=30)
 
         frame_copy = detectSmile(frame_copy, faces, gray, model)
 
         cv2.imshow("Face", frame_copy)
 
-        if cv2.waitKey(1) & 0xFF == ord("q"):
+        # ESC to quit
+        key = cv2.waitKey(1)
+        if key == 27:
             break
 
 
@@ -83,8 +85,8 @@ def detectSmile(frame, faces, grayscale, model):
         roi = extractROI(grayscale, x, y, width, height, size=28)
         label = predictLabel(roi, model)
         writeLabelToVideo(frame, label, origin=(x, y-10),
-                          font=cv2.FONT_HERSHEY_SIMPLEX, font_scale=0.45,
-                          color=(0,0,255), thickness=3, x=x, y=y,
+                          font=cv2.FONT_HERSHEY_SIMPLEX, font_scale=0.75,
+                          color=(0,0,255), thickness=1, x=x, y=y,
                           w=width, h=height)
     return frame
 
@@ -100,7 +102,7 @@ def extractROI(frame, x, y, w, h, size):
 
 def predictLabel(face, model):
     (no_smile, smile) = model.predict(face)[0]
-    return "Smile" if smile > no_smile else "No Smile"
+    return "Smile" if smile >= no_smile else "No Smile"
 
 
 def writeLabelToVideo(frame, label, origin, font, font_scale, color,
