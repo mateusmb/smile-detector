@@ -1,5 +1,5 @@
 # smile-detector
-A real-time smile detector program, based on Adrian Rosebrock's Deep Learning for Computer Vision with Python, Chapter 22.
+A real-time smile detector program, based on Adrian Rosebrock's Deep Learning for Computer Vision with Python, Chapter 22¹.
 
 <img src="https://imgur.com/moPlcdw.jpg" width="360" height="320" alt="No Smile"> <img src="https://imgur.com/76OjrGR.jpg" width="360" height="320" alt="Smile">
 
@@ -75,3 +75,5 @@ plots/    - Accuracy, loss and other metrics plots can be stored here
 
 training/ - Train scripts for model creation
 
+# Reference
+1. Adrian Rosebrock, Deep Learning in Computer Vision with Python, PyImageSearch, https://www.pyimagesearch.com/deep-learning-computer-vision-python-book/
